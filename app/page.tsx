@@ -156,12 +156,16 @@ export default function GameBoard() {
 
           {/* แสดงผลลัพธ์ */}
           {spyWin !== null && (
-            <div className="mt-6 text-3xl font-bold">
-              {spyWin ? (
-                <span className="text-green-500">🎉 Spy Wins!</span>
-              ) : (
-                <span className="text-red-500">❌ Spy Loses!</span>
-              )}
+            <div className="text-center">
+              <h2 className="text-3xl font-bold">
+                {spyWin ? "🎉 Spy Win!" : "❌ Spy Lose!"}
+              </h2>
+              <Button
+                onClick={() => window.location.reload()} // รีเซ็ตเกม
+                className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              >
+                เล่นใหม่
+              </Button>
             </div>
           )}
         </div>
