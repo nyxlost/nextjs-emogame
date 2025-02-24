@@ -6,15 +6,18 @@ import { Button, Card, CardContent } from "@mui/material"
 const emotions = ["Happy", "Sad", "Angry", "Excited", "Worried"]
 const situations = ["Situation 1", "Situation 2", "Situation 3", "Situation 4", "Situation 5", "Situation 6"]
 
+function shuffleArray<T>(array: T[]): T[] {
+  return [...array].sort(() => Math.random() - 0.5)
+}
+
 export default function GameBoard() {
   const [numPlayers, setNumPlayers] = useState(3)
   const [players, setPlayers] = useState<string[]>([])
   const [currentPlayer, setCurrentPlayer] = useState(0)
   const [gameStarted, setGameStarted] = useState(false)
   const [revealed, setRevealed] = useState(false)
-  const [role, setRole] = useState<string | null>(null)
-  const [situation, setSituation] = useState<string>("")
   const [roles, setRoles] = useState<string[]>([])
+  const [playerSituations, setPlayerSituations] = useState<string[]>([])
   const [selectedEmo, setSelectedEmo] = useState<string>("")
   const [allCardsRevealed, setAllCardsRevealed] = useState(false)
   const [timer, setTimer] = useState<number>(120)
@@ -28,10 +31,8 @@ export default function GameBoard() {
     newRoles[spyIndex] = "Spy"
     setRoles(newRoles)
 
-    setRole(newRoles[currentPlayer])
-
-    const newSituation = situations[Math.floor(Math.random() * situations.length)]
-    setSituation(newSituation)
+    const shuffledSituations = shuffleArray(situations).slice(0, players.length)
+    setPlayerSituations(shuffledSituations)
 
     const randomEmo = emotions[Math.floor(Math.random() * emotions.length)]
     setSelectedEmo(randomEmo)
@@ -48,7 +49,6 @@ export default function GameBoard() {
     if (currentPlayer + 1 < players.length) {
       setCurrentPlayer(currentPlayer + 1)
       setRevealed(false)
-      setRole(roles[currentPlayer + 1])
     } else {
       setAllCardsRevealed(true)
     }
@@ -112,7 +112,7 @@ export default function GameBoard() {
         </div>
       ) : (
         <div className="flex flex-col items-center">
-          <h2 className="text-xl mb-4">{players[currentPlayer]}is Turn</h2>
+          <h2 className="text-xl mb-4">{players[currentPlayer]}Is Turn</h2>
 
           <div className="flex gap-4">
             {/* การ์ด Role */}
@@ -123,7 +123,7 @@ export default function GameBoard() {
               >
                 <CardContent>
                   {revealed ? (
-                    role === "Spy" ? (
+                    roles[currentPlayer] === "Spy" ? (
                       <span className="text-lg font-bold">Spy</span>
                     ) : (
                       <span className="text-lg font-bold">{selectedEmo}</span>
@@ -143,10 +143,10 @@ export default function GameBoard() {
               >
                 <CardContent>
                   {revealed ? (
-                    role === "Spy" ? (
+                    roles[currentPlayer] === "Spy" ? (
                       <span className="text-lg font-bold">Spy</span>
                     ) : (
-                      <span className="text-lg font-bold">{situation}</span>
+                      <span className="text-lg font-bold">{playerSituations[currentPlayer]}</span>
                     )
                   ) : (
                     <span className="text-gray-400">Tap to Reveal</span>
