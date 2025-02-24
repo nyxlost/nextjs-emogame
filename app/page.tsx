@@ -16,7 +16,7 @@ export default function GameBoard() {
   const [situation, setSituation] = useState<string>("")
   const [roles, setRoles] = useState<string[]>([])
   const [selectedEmo, setSelectedEmo] = useState<string>("")
-  const [allCardsRevealed, setAllCardsRevealed] = useState(false) // State เช็คว่าทุกคนเปิดการ์ดหมดแล้ว
+  const [allCardsRevealed, setAllCardsRevealed] = useState(false)
   const [timer, setTimer] = useState<number>(120)
   const [timerActive, setTimerActive] = useState(false)
 
@@ -37,11 +37,11 @@ export default function GameBoard() {
     setSelectedEmo(randomEmo)
 
     setGameStarted(true)
-    setAllCardsRevealed(false) // รีเซ็ตค่าเมื่อเริ่มเกมใหม่
+    setAllCardsRevealed(false)
   }
 
-  const revealCard = () => {
-    setRevealed(true)
+  const toggleCards = () => {
+    setRevealed(!revealed)
   }
 
   const nextPlayer = () => {
@@ -50,13 +50,13 @@ export default function GameBoard() {
       setRevealed(false)
       setRole(roles[currentPlayer + 1])
     } else {
-      setAllCardsRevealed(true) // ทุกคนเปิดการ์ดหมดแล้ว
+      setAllCardsRevealed(true)
     }
   }
 
   useEffect(() => {
     if (allCardsRevealed) {
-      setTimerActive(true) // เริ่มจับเวลาเมื่อปิดการ์ดสุดท้าย
+      setTimerActive(true)
     }
   }, [allCardsRevealed])
 
@@ -106,35 +106,62 @@ export default function GameBoard() {
           </Button>
         </div>
       ) : allCardsRevealed ? (
-        // หน้าที่ 2 แสดงแค่เวลา ไม่มีการ์ด
         <div className="text-center">
           <h2 className="text-2xl font-bold">Game Started!</h2>
           <p className="text-lg mt-4">Time Left: {timer} seconds</p>
         </div>
       ) : (
         <div className="flex flex-col items-center">
-          <h2 className="text-xl mb-4">{players[currentPlayer]} is Turn</h2>
-          <motion.div whileTap={{ scale: 0.9 }}>
-            <Card
-              onClick={revealed ? nextPlayer : revealCard}
-              className="cursor-pointer w-64 h-96 flex items-center justify-center bg-gray-800 border border-gray-600 text-center"
-            >
-              <CardContent>
-                {revealed ? (
-                  role === "Spy" ? (
-                    <span className="text-lg font-bold">Spy</span>
-                  ) : (
-                    <div>
+          <h2 className="text-xl mb-4">{players[currentPlayer]}is Turn</h2>
+
+          <div className="flex gap-4">
+            {/* การ์ด Role */}
+            <motion.div whileTap={{ scale: 0.9 }}>
+              <Card
+                onClick={toggleCards}
+                className="cursor-pointer w-40 h-56 flex items-center justify-center bg-gray-800 border border-gray-600 text-center"
+              >
+                <CardContent>
+                  {revealed ? (
+                    role === "Spy" ? (
+                      <span className="text-lg font-bold">Spy</span>
+                    ) : (
                       <span className="text-lg font-bold">{selectedEmo}</span>
-                      <p className="text-sm mt-2">{situation}</p>
-                    </div>
-                  )
-                ) : (
-                  <span className="text-gray-400">Tap to Reveal</span>
-                )}
-              </CardContent>
-            </Card>
-          </motion.div>
+                    )
+                  ) : (
+                    <span className="text-gray-400">Tap to Reveal</span>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* การ์ดสถานการณ์ */}
+            <motion.div whileTap={{ scale: 0.9 }}>
+              <Card
+                onClick={toggleCards}
+                className="cursor-pointer w-40 h-56 flex items-center justify-center bg-gray-800 border border-gray-600 text-center"
+              >
+                <CardContent>
+                  {revealed ? (
+                    role === "Spy" ? (
+                      <span className="text-lg font-bold">Spy</span>
+                    ) : (
+                      <span className="text-lg font-bold">{situation}</span>
+                    )
+                  ) : (
+                    <span className="text-gray-400">Tap to Reveal</span>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+
+          <Button
+            onClick={nextPlayer}
+            className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Next Player
+          </Button>
         </div>
       )}
     </div>
