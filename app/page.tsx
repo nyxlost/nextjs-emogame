@@ -30,6 +30,8 @@ export default function GameBoard() {
   const [timer, setTimer] = useState<number>(10) // ลดเวลาทดสอบ
   const [timerActive, setTimerActive] = useState(false)
   const [spyWin, setSpyWin] = useState<boolean | null>(null)
+  const [reviewPhase, setReviewPhase] = useState(false) // หน้าทบทวนตัวเอง
+  const [spySelecting, setSpySelecting] = useState(false) // หน้าสำหรับ spy เลือก emotion
 
   const startGame = () => {
     if (players.length < 3 || players.length > 6) return
@@ -77,6 +79,7 @@ export default function GameBoard() {
       return () => clearInterval(interval)
     } else if (timer === 0) {
       setTimerActive(false)
+      setReviewPhase(true) // แสดงหน้า "ทบทวนตัวเอง"
     }
   }, [timerActive, timer])
 
@@ -120,12 +123,22 @@ export default function GameBoard() {
             Start Game
           </Button>
         </div>
-      ) : timer === 0 ? (
-        // ✨ แสดง UI สำหรับ Spy เลือกอารมณ์ ✨
+      ) : reviewPhase ? (
         <div className="text-center">
-          <h2 className="text-2xl font-bold">
-            Time is Up! Spy, choose the correct emotion:
-          </h2>
+          <h2 className="text-2xl font-bold">🧐 ทบทวนตัวเอง</h2>
+          <Button
+            onClick={() => {
+              setReviewPhase(false)
+              setSpySelecting(true) // ให้ Spy เลือก Emotion
+            }}
+            className="mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+          >
+            ไปยังการเลือก Emotion
+          </Button>
+        </div>
+      ) : spySelecting ? (
+        <div className="text-center">
+          <h2 className="text-2xl font-bold">🔍 Spy เลือก Emotion</h2>
           <div className="grid grid-cols-3 gap-4 mt-4">
             {emotions.map((emo) => (
               <motion.div key={emo} whileTap={{ scale: 0.9 }}>
@@ -141,13 +154,13 @@ export default function GameBoard() {
             ))}
           </div>
 
-          {/* ✨ แสดงผลว่า Spy ชนะหรือแพ้ ✨ */}
+          {/* แสดงผลลัพธ์ */}
           {spyWin !== null && (
             <div className="mt-6 text-3xl font-bold">
               {spyWin ? (
-                <span className="text-green-500">Spy Wins! 🎉</span>
+                <span className="text-green-500">🎉 Spy Wins!</span>
               ) : (
-                <span className="text-red-500">Spy Loses! ❌</span>
+                <span className="text-red-500">❌ Spy Loses!</span>
               )}
             </div>
           )}
