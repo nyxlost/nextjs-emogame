@@ -4,7 +4,14 @@ import { motion } from "framer-motion"
 import { Button, Card, CardContent } from "@mui/material"
 
 const emotions = ["Happy", "Sad", "Angry", "Excited", "Worried"]
-const situations = ["Situation 1", "Situation 2", "Situation 3", "Situation 4", "Situation 5", "Situation 6"]
+const situations = [
+  "Situation 1",
+  "Situation 2",
+  "Situation 3",
+  "Situation 4",
+  "Situation 5",
+  "Situation 6",
+]
 
 function shuffleArray<T>(array: T[]): T[] {
   return [...array].sort(() => Math.random() - 0.5)
@@ -20,8 +27,9 @@ export default function GameBoard() {
   const [playerSituations, setPlayerSituations] = useState<string[]>([])
   const [selectedEmo, setSelectedEmo] = useState<string>("")
   const [allCardsRevealed, setAllCardsRevealed] = useState(false)
-  const [timer, setTimer] = useState<number>(120)
+  const [timer, setTimer] = useState<number>(10) // ลดเวลาทดสอบ
   const [timerActive, setTimerActive] = useState(false)
+  const [spyWin, setSpyWin] = useState<boolean | null>(null)
 
   const startGame = () => {
     if (players.length < 3 || players.length > 6) return
@@ -39,6 +47,7 @@ export default function GameBoard() {
 
     setGameStarted(true)
     setAllCardsRevealed(false)
+    setSpyWin(null)
   }
 
   const toggleCards = () => {
@@ -66,8 +75,14 @@ export default function GameBoard() {
         setTimer((prev) => prev - 1)
       }, 1000)
       return () => clearInterval(interval)
+    } else if (timer === 0) {
+      setTimerActive(false)
     }
   }, [timerActive, timer])
+
+  const handleSpyGuess = (emo: string) => {
+    setSpyWin(emo === selectedEmo)
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
@@ -105,6 +120,38 @@ export default function GameBoard() {
             Start Game
           </Button>
         </div>
+      ) : timer === 0 ? (
+        // ✨ แสดง UI สำหรับ Spy เลือกอารมณ์ ✨
+        <div className="text-center">
+          <h2 className="text-2xl font-bold">
+            Time is Up! Spy, choose the correct emotion:
+          </h2>
+          <div className="grid grid-cols-3 gap-4 mt-4">
+            {emotions.map((emo) => (
+              <motion.div key={emo} whileTap={{ scale: 0.9 }}>
+                <Card
+                  onClick={() => handleSpyGuess(emo)}
+                  className="cursor-pointer w-32 h-32 flex items-center justify-center bg-gray-800 border border-gray-600 text-center"
+                >
+                  <CardContent>
+                    <span className="text-lg font-bold">{emo}</span>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* ✨ แสดงผลว่า Spy ชนะหรือแพ้ ✨ */}
+          {spyWin !== null && (
+            <div className="mt-6 text-3xl font-bold">
+              {spyWin ? (
+                <span className="text-green-500">Spy Wins! 🎉</span>
+              ) : (
+                <span className="text-red-500">Spy Loses! ❌</span>
+              )}
+            </div>
+          )}
+        </div>
       ) : allCardsRevealed ? (
         <div className="text-center">
           <h2 className="text-2xl font-bold">Game Started!</h2>
@@ -112,10 +159,9 @@ export default function GameBoard() {
         </div>
       ) : (
         <div className="flex flex-col items-center">
-          <h2 className="text-xl mb-4">{players[currentPlayer]}Is Turn</h2>
+          <h2 className="text-xl mb-4">{players[currentPlayer]} Is Turn</h2>
 
           <div className="flex gap-4">
-            {/* การ์ด Role */}
             <motion.div whileTap={{ scale: 0.9 }}>
               <Card
                 onClick={toggleCards}
@@ -135,7 +181,6 @@ export default function GameBoard() {
               </Card>
             </motion.div>
 
-            {/* การ์ดสถานการณ์ */}
             <motion.div whileTap={{ scale: 0.9 }}>
               <Card
                 onClick={toggleCards}
@@ -146,7 +191,9 @@ export default function GameBoard() {
                     roles[currentPlayer] === "Spy" ? (
                       <span className="text-lg font-bold">Spy</span>
                     ) : (
-                      <span className="text-lg font-bold">{playerSituations[currentPlayer]}</span>
+                      <span className="text-lg font-bold">
+                        {playerSituations[currentPlayer]}
+                      </span>
                     )
                   ) : (
                     <span className="text-gray-400">Tap to Reveal</span>
