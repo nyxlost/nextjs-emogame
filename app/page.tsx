@@ -1,16 +1,24 @@
 "use client"
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Button, Card, CardContent } from "@mui/material"
+import { Button, Card, CardContent, CardMedia } from "@mui/material"
+import Image from "next/image"
 
-const emotions = ["Happy", "Sad", "Angry", "Excited", "Worried"]
+const emotions = [
+  { name: "Happy", image: "/images/happy.jpg" },
+  { name: "Sad", image: "/images/sad.jpg" },
+  { name: "Angry", image: "/images/angry.jpg" },
+  { name: "Excited", image: "/images/excited.jpg" },
+  { name: "Worried", image: "/images/worried.jpg" },
+]
+
 const situations = [
-  "Situation 1",
-  "Situation 2",
-  "Situation 3",
-  "Situation 4",
-  "Situation 5",
-  "Situation 6",
+  { name: "Situation 1", image: "/images/situation.jpg" },
+  { name: "Situation 2", image: "/images/situation2.jpg" },
+  { name: "Situation 3", image: "/images/situation3.jpg" },
+  { name: "Situation 4", image: "/images/situation4.jpg" },
+  { name: "Situation 5", image: "/images/situation5.jpg" },
+  { name: "Situation 6", image: "/images/situation6.jpg" },
 ]
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -18,20 +26,22 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function GameBoard() {
-  const [numPlayers, setNumPlayers] = useState(3)
+  const [numPlayers, setNumPlayers] = useState("3")
   const [players, setPlayers] = useState<string[]>([])
   const [currentPlayer, setCurrentPlayer] = useState(0)
   const [gameStarted, setGameStarted] = useState(false)
   const [revealed, setRevealed] = useState(false)
   const [roles, setRoles] = useState<string[]>([])
-  const [playerSituations, setPlayerSituations] = useState<string[]>([])
+  const [playerSituations, setPlayerSituations] = useState<
+    { name: string; image: string }[]
+  >([])
   const [selectedEmo, setSelectedEmo] = useState<string>("")
   const [allCardsRevealed, setAllCardsRevealed] = useState(false)
-  const [timer, setTimer] = useState<number>(10) // ลดเวลาทดสอบ
+  const [timer, setTimer] = useState<number>(10)
   const [timerActive, setTimerActive] = useState(false)
   const [spyWin, setSpyWin] = useState<boolean | null>(null)
-  const [reviewPhase, setReviewPhase] = useState(false) // หน้าทบทวนตัวเอง
-  const [spySelecting, setSpySelecting] = useState(false) // หน้าสำหรับ spy เลือก emotion
+  const [reviewPhase, setReviewPhase] = useState(false)
+  const [spySelecting, setSpySelecting] = useState(false)
 
   const startGame = () => {
     if (players.length < 3 || players.length > 6) return
@@ -45,12 +55,14 @@ export default function GameBoard() {
     setPlayerSituations(shuffledSituations)
 
     const randomEmo = emotions[Math.floor(Math.random() * emotions.length)]
-    setSelectedEmo(randomEmo)
+    setSelectedEmo(randomEmo.name)
 
     setGameStarted(true)
     setAllCardsRevealed(false)
     setSpyWin(null)
   }
+
+  const filteredEmo = emotions.find((emo) => emo.name === selectedEmo)
 
   const toggleCards = () => {
     setRevealed(!revealed)
@@ -79,7 +91,7 @@ export default function GameBoard() {
       return () => clearInterval(interval)
     } else if (timer === 0) {
       setTimerActive(false)
-      setReviewPhase(true) // แสดงหน้า "ทบทวนตัวเอง"
+      setReviewPhase(true)
     }
   }, [timerActive, timer])
 
@@ -89,21 +101,27 @@ export default function GameBoard() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
-      <h1 className="text-3xl font-bold mb-4">Mr. White Board Game</h1>
+      <h1 className="text-3xl font-bold mb-4">Emotions Board Game</h1>
 
       {!gameStarted ? (
         <div className="flex flex-col items-center">
-          <label className="mb-2">Number of Players (3-6):</label>
+          <label className="mb-2">จำนวนผู้เล่น (3-6) คน :</label>
           <input
-            type="number"
-            min="3"
-            max="6"
+            type="text"
             value={numPlayers}
-            onChange={(e) => setNumPlayers(Number(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value
+              if (
+                /^\d{0,1}$/.test(value) &&
+                (value === "" || (Number(value) >= 3 && Number(value) <= 6))
+              ) {
+                setNumPlayers(value)
+              }
+            }}
             className="text-black mb-4 p-2"
           />
           <label className="mb-2">Enter Player Names:</label>
-          {Array.from({ length: numPlayers }).map((_, index) => (
+          {Array.from({ length: Number(numPlayers) }).map((_, index) => (
             <input
               key={index}
               type="text"
@@ -116,11 +134,8 @@ export default function GameBoard() {
               }}
             />
           ))}
-          <Button
-            onClick={startGame}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-          >
-            Start Game
+          <Button onClick={startGame} className="py-2 px-4 mt-4">
+            <span className="text-black bg-white p-3">Start Game</span>
           </Button>
         </div>
       ) : reviewPhase ? (
@@ -141,30 +156,32 @@ export default function GameBoard() {
           <h2 className="text-2xl font-bold">🔍 Spy เลือก Emotion</h2>
           <div className="grid grid-cols-3 gap-4 mt-4">
             {emotions.map((emo) => (
-              <motion.div key={emo} whileTap={{ scale: 0.9 }}>
+              <motion.div key={emo.name} whileTap={{ scale: 0.9 }}>
                 <Card
-                  onClick={() => handleSpyGuess(emo)}
-                  className="cursor-pointer w-32 h-32 flex items-center justify-center bg-gray-800 border border-gray-600 text-center"
+                  onClick={() => handleSpyGuess(emo.name)}
+                  className="cursor-pointer w-32 h-34 flex flex-col items-center justify-center bg-gray-800 border border-gray-600 text-center"
                 >
-                  <CardContent>
-                    <span className="text-lg font-bold">{emo}</span>
-                  </CardContent>
+                  <CardMedia
+                    component="img"
+                    image={emo.image}
+                    alt={emo.name}
+                    className="w-full h-full object-cover items-center"
+                  />
                 </Card>
+                <span className="text-lg font-bold">{emo.name}</span>
               </motion.div>
             ))}
+            {/* แสดงผลลัพธ์ */}
           </div>
-
-          {/* แสดงผลลัพธ์ */}
           {spyWin !== null && (
-            <div className="text-center">
+            <div className="text-center mt-10">
               <h2 className="text-3xl font-bold">
                 {spyWin ? "🎉 Spy Win!" : "❌ Spy Lose!"}
               </h2>
-              <Button
-                onClick={() => window.location.reload()} // รีเซ็ตเกม
-                className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              >
-                เล่นใหม่
+              <Button onClick={() => window.location.reload()}>
+                <span className="text-black bg-white p-3 mt-5 text-xl">
+                  เล่นใหม่
+                </span>
               </Button>
             </div>
           )}
@@ -189,7 +206,18 @@ export default function GameBoard() {
                     roles[currentPlayer] === "Spy" ? (
                       <span className="text-lg font-bold">Spy</span>
                     ) : (
-                      <span className="text-lg font-bold">{selectedEmo}</span>
+                      <div>
+                        <Image
+                          src={filteredEmo?.image || "/images/default.jpg"}
+                          alt={filteredEmo?.name || "Default Emotion"}
+                          className="w-full h-auto object-cover rounded"
+                          width={160}
+                          height={224}
+                        />
+                        <span className="text-lg font-bold">
+                          {filteredEmo?.name}
+                        </span>
+                      </div>
                     )
                   ) : (
                     <span className="text-gray-400">Tap to Reveal</span>
@@ -208,9 +236,18 @@ export default function GameBoard() {
                     roles[currentPlayer] === "Spy" ? (
                       <span className="text-lg font-bold">Spy</span>
                     ) : (
-                      <span className="text-lg font-bold">
-                        {playerSituations[currentPlayer]}
-                      </span>
+                      <div>
+                        <Image
+                          src={playerSituations[currentPlayer].image}
+                          alt={playerSituations[currentPlayer].name}
+                          className="w-full h-auto object-cover rounded"
+                          width={160}
+                          height={224}
+                        />
+                        <span className="text-lg font-bold">
+                          {playerSituations[currentPlayer].name}
+                        </span>
+                      </div>
                     )
                   ) : (
                     <span className="text-gray-400">Tap to Reveal</span>
@@ -220,11 +257,10 @@ export default function GameBoard() {
             </motion.div>
           </div>
 
-          <Button
-            onClick={nextPlayer}
-            className="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Next Player
+          <Button onClick={nextPlayer}>
+            <span className="text-black bg-white p-3 mt-5 text-xl">
+              คนต่อไป
+            </span>
           </Button>
         </div>
       )}
