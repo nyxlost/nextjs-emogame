@@ -5,20 +5,20 @@ import { Button, Card, CardContent, CardMedia } from "@mui/material"
 import Image from "next/image"
 
 const emotions = [
-  { name: "Happy", image: "/images/happy.jpg" },
-  { name: "Sad", image: "/images/sad.jpg" },
+  { name: "Happy", image: "/images/angry.jpg" },
+  { name: "Sad", image: "/images/angry.jpg" },
   { name: "Angry", image: "/images/angry.jpg" },
-  { name: "Excited", image: "/images/excited.jpg" },
-  { name: "Worried", image: "/images/worried.jpg" },
+  { name: "Excited", image: "/images/angry.jpg" },
+  { name: "Worried", image: "/images/angry.jpg" },
 ]
 
 const situations = [
-  { name: "Situation 1", image: "/images/situation.jpg" },
-  { name: "Situation 2", image: "/images/situation2.jpg" },
-  { name: "Situation 3", image: "/images/situation3.jpg" },
-  { name: "Situation 4", image: "/images/situation4.jpg" },
-  { name: "Situation 5", image: "/images/situation5.jpg" },
-  { name: "Situation 6", image: "/images/situation6.jpg" },
+  { name: "Situation 1", image: "/images/angry.jpg" },
+  { name: "Situation 2", image: "/images/angry.jpg" },
+  { name: "Situation 3", image: "/images/angry.jpg" },
+  { name: "Situation 4", image: "/images/angry.jpg" },
+  { name: "Situation 5", image: "/images/angry.jpg" },
+  { name: "Situation 6", image: "/images/angry.jpg" },
 ]
 
 function shuffleArray<T>(array: T[]): T[] {
