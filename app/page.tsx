@@ -13,12 +13,12 @@ import {
 import Image from "next/image"
 
 const emotions = [
-  { name: "angry", image: "/images/angry.png" },
-  { name: "fear", image: "/images/fear.png" },
-  { name: "jealous", image: "/images/jealous.png" },
-  { name: "sad", image: "/images/sad.png" },
-  { name: "shy", image: "/images/shy.png" },
-  { name: "worried", image: "/images/worried.png" },
+  { name: "โกรธ", image: "/images/angry.png" },
+  { name: "กลัว", image: "/images/fear.png" },
+  { name: "อิจฉา", image: "/images/jealous.png" },
+  { name: "เศร้า", image: "/images/sad.png" },
+  { name: "อาย", image: "/images/shy.png" },
+  { name: "กังวล", image: "/images/worried.png" },
 ]
 
 const situations = [
@@ -126,14 +126,6 @@ export default function GameBoard() {
       <Button onClick={() => setOpen(true)}>
         <span className="text-black bg-white p-3 rounded-md">กติกา</span>
       </Button>
-
-      <Image
-        src="/angry.png"
-        alt={filteredEmo?.name || "Default Emotion"}
-        className="w-full h-auto object-cover rounded"
-        width={160}
-        height={224}
-      />
 
       {!gameStarted ? (
         <div className="flex flex-col items-center">
