@@ -14,31 +14,31 @@ import Image from "next/image"
 
 const emotions = [
   { name: "โกรธ", image: "/images/angry.jpg" },
-  { name: "กลัว", image: "/images/fear.png" },
-  { name: "อิจฉา", image: "/images/jealous.png" },
-  { name: "เศร้า", image: "/images/sad.png" },
-  { name: "อาย", image: "/images/shy.png" },
-  { name: "กังวล", image: "/images/worried.png" },
+  { name: "กลัว", image: "/images/fear.jpg" },
+  { name: "อิจฉา", image: "/images/jealous.jpg" },
+  { name: "เศร้า", image: "/images/sad.jpg" },
+  { name: "อาย", image: "/images/shy.jpg" },
+  { name: "กังวล", image: "/images/worried.jpg" },
 ]
 
 const situations = [
-  { name: "ตอบคำถามครูผิด", image: "/images/situation_1.png" },
-  { name: "ทำไอศกรีมหล่น", image: "/images/situation_2.png" },
-  { name: "เพื่อนผลักให้ล้ม", image: "/images/situation_3.png" },
+  { name: "ตอบคำถามครูผิด", image: "/images/situation_1.jpg" },
+  { name: "ทำไอศกรีมหล่น", image: "/images/situation_2.jpg" },
+  { name: "เพื่อนผลักให้ล้ม", image: "/images/situation_3.jpg" },
   {
     name: "เพื่อนไม่ช่วยทำงานกลุ่ม",
-    image: "/images/situation_4.png",
+    image: "/images/situation_4.jpg",
   },
-  { name: "เพื่อนไม่ให้เล่นด้วย", image: "/images/situation_5.png" },
-  { name: "เพื่อนอวดของเล่น", image: "/images/situation_6.png" },
-  { name: "แม่ไม่พาไปเที่ยว", image: "/images/situation_7.png" },
-  { name: "แม่ไม่พาไปเที่ยว", image: "/images/situation_8.png" },
-  { name: "ลืมเอาการบ้านมาส่ง", image: "/images/situation_9.png" },
+  { name: "เพื่อนไม่ให้เล่นด้วย", image: "/images/situation_5.jpg" },
+  { name: "เพื่อนอวดของเล่น", image: "/images/situation_6.jpg" },
+  { name: "แม่ไม่พาไปเที่ยว", image: "/images/situation_7.jpg" },
+  { name: "แม่ไม่พาไปเที่ยว", image: "/images/situation_8.jpg" },
+  { name: "ลืมเอาการบ้านมาส่ง", image: "/images/situation_9.jpg" },
   {
     name: "สอบตกในวิชาที่ตั้งใจอ่าน",
-    image: "/images/situation_10.png",
+    image: "/images/situation_10.jpg",
   },
-  { name: "ใส่ชุดมาผิดวัน", image: "/images/situation_11.png" },
+  { name: "ใส่ชุดมาผิดวัน", image: "/images/situation_11.jpg" },
 ]
 
 function shuffleArray<T>(array: T[]): T[] {
