@@ -275,7 +275,7 @@ export default function GameBoard() {
                       <span className="text-lg font-bold">Spy</span>
                     ) : (
                       <div>
-                        <Image
+                        <img
                           src={playerSituations[currentPlayer].image}
                           alt={playerSituations[currentPlayer].name}
                           className="w-full h-auto object-cover rounded"
