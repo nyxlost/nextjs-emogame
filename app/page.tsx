@@ -128,7 +128,7 @@ export default function GameBoard() {
       </Button>
 
       <Image
-        src="/images/angry.png"
+        src="/angry.png"
         alt={filteredEmo?.name || "Default Emotion"}
         className="w-full h-auto object-cover rounded"
         width={160}
