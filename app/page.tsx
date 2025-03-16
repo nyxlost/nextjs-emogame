@@ -13,12 +13,12 @@ import {
 import Image from "next/image"
 
 const emotions = [
-  { name: "โกรธ", image: "/images/angry.png" },
-  { name: "กลัว", image: "/images/fear.png" },
-  { name: "อิจฉา", image: "/images/jealous.png" },
-  { name: "เศร้า", image: "/images/sad.png" },
-  { name: "อาย", image: "/images/shy.png" },
-  { name: "กังวล", image: "/images/worried.png" },
+  { name: "angry", image: "/images/angry.png" },
+  { name: "fear", image: "/images/fear.png" },
+  { name: "jealous", image: "/images/jealous.png" },
+  { name: "sad", image: "/images/sad.png" },
+  { name: "shy", image: "/images/shy.png" },
+  { name: "worried", image: "/images/worried.png" },
 ]
 
 const situations = [
@@ -189,7 +189,7 @@ export default function GameBoard() {
                 >
                   <CardMedia
                     component="img"
-                    image={emo.image}
+                    image="/images/angry.png"
                     alt={emo.name}
                     className="w-full h-full object-cover items-center"
                   />
