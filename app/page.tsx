@@ -13,32 +13,32 @@ import {
 import Image from "next/image"
 
 const emotions = [
-  { name: "โกรธ", image: "/images/emo/angry.png" },
-  { name: "กลัว", image: "/images/emo/fear.png" },
-  { name: "อิจฉา", image: "/images/emo/jealous.png" },
-  { name: "เศร้า", image: "/images/emo/sad.png" },
-  { name: "อาย", image: "/images/emo/shy.png" },
-  { name: "กังวล", image: "/images/emo/worried.png" },
+  { name: "โกรธ", image: "/images/angry.png" },
+  { name: "กลัว", image: "/images/fear.png" },
+  { name: "อิจฉา", image: "/images/jealous.png" },
+  { name: "เศร้า", image: "/images/sad.png" },
+  { name: "อาย", image: "/images/shy.png" },
+  { name: "กังวล", image: "/images/worried.png" },
 ]
 
 const situations = [
-  { name: "ตอบคำถามครูผิด", image: "/images/situation/situation_1.png" },
-  { name: "ทำไอศกรีมหล่น", image: "/images/situation/situation_2.png" },
-  { name: "เพื่อนผลักให้ล้ม", image: "/images/situation/situation_3.png" },
+  { name: "ตอบคำถามครูผิด", image: "/images/situation_1.png" },
+  { name: "ทำไอศกรีมหล่น", image: "/images/situation_2.png" },
+  { name: "เพื่อนผลักให้ล้ม", image: "/images/situation_3.png" },
   {
     name: "เพื่อนไม่ช่วยทำงานกลุ่ม",
-    image: "/images/situation/situation_4.png",
+    image: "/images/situation_4.png",
   },
-  { name: "เพื่อนไม่ให้เล่นด้วย", image: "/images/situation/situation_5.png" },
-  { name: "เพื่อนอวดของเล่น", image: "/images/situation/situation_6.png" },
-  { name: "แม่ไม่พาไปเที่ยว", image: "/images/situation/situation_7.png" },
-  { name: "แม่ไม่พาไปเที่ยว", image: "/images/situation/situation_8.png" },
-  { name: "ลืมเอาการบ้านมาส่ง", image: "/images/situation/situation_9.png" },
+  { name: "เพื่อนไม่ให้เล่นด้วย", image: "/images/situation_5.png" },
+  { name: "เพื่อนอวดของเล่น", image: "/images/situation_6.png" },
+  { name: "แม่ไม่พาไปเที่ยว", image: "/images/situation_7.png" },
+  { name: "แม่ไม่พาไปเที่ยว", image: "/images/situation_8.png" },
+  { name: "ลืมเอาการบ้านมาส่ง", image: "/images/situation_9.png" },
   {
     name: "สอบตกในวิชาที่ตั้งใจอ่าน",
-    image: "/images/situation/situation_10.png",
+    image: "/images/situation_10.png",
   },
-  { name: "ใส่ชุดมาผิดวัน", image: "/images/situation/situation_11.png" },
+  { name: "ใส่ชุดมาผิดวัน", image: "/images/situation_11.png" },
 ]
 
 function shuffleArray<T>(array: T[]): T[] {
