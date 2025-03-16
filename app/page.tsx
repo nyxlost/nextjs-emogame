@@ -1,24 +1,44 @@
 "use client"
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Button, Card, CardContent, CardMedia } from "@mui/material"
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Modal,
+  Typography,
+} from "@mui/material"
 import Image from "next/image"
 
 const emotions = [
-  { name: "Happy", image: "/images/angry.jpg" },
-  { name: "Sad", image: "/images/angry.jpg" },
-  { name: "Angry", image: "/images/angry.jpg" },
-  { name: "Excited", image: "/images/angry.jpg" },
-  { name: "Worried", image: "/images/angry.jpg" },
+  { name: "โกรธ", image: "/images/emo/angry.png" },
+  { name: "กลัว", image: "/images/emo/fear.png" },
+  { name: "อิจฉา", image: "/images/emo/jealous.png" },
+  { name: "เศร้า", image: "/images/emo/sad.png" },
+  { name: "อาย", image: "/images/emo/shy.png" },
+  { name: "กังวล", image: "/images/emo/worried.png" },
 ]
 
 const situations = [
-  { name: "Situation 1", image: "/images/angry.jpg" },
-  { name: "Situation 2", image: "/images/angry.jpg" },
-  { name: "Situation 3", image: "/images/angry.jpg" },
-  { name: "Situation 4", image: "/images/angry.jpg" },
-  { name: "Situation 5", image: "/images/angry.jpg" },
-  { name: "Situation 6", image: "/images/angry.jpg" },
+  { name: "ตอบคำถามครูผิด", image: "/images/situation/situation_1.png" },
+  { name: "ทำไอศกรีมหล่น", image: "/images/situation/situation_2.png" },
+  { name: "เพื่อนผลักให้ล้ม", image: "/images/situation/situation_3.png" },
+  {
+    name: "เพื่อนไม่ช่วยทำงานกลุ่ม",
+    image: "/images/situation/situation_4.png",
+  },
+  { name: "เพื่อนไม่ให้เล่นด้วย", image: "/images/situation/situation_5.png" },
+  { name: "เพื่อนอวดของเล่น", image: "/images/situation/situation_6.png" },
+  { name: "แม่ไม่พาไปเที่ยว", image: "/images/situation/situation_7.png" },
+  { name: "แม่ไม่พาไปเที่ยว", image: "/images/situation/situation_8.png" },
+  { name: "ลืมเอาการบ้านมาส่ง", image: "/images/situation/situation_9.png" },
+  {
+    name: "สอบตกในวิชาที่ตั้งใจอ่าน",
+    image: "/images/situation/situation_10.png",
+  },
+  { name: "ใส่ชุดมาผิดวัน", image: "/images/situation/situation_11.png" },
 ]
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -42,6 +62,7 @@ export default function GameBoard() {
   const [spyWin, setSpyWin] = useState<boolean | null>(null)
   const [reviewPhase, setReviewPhase] = useState(false)
   const [spySelecting, setSpySelecting] = useState(false)
+  const [open, setOpen] = useState(false)
 
   const startGame = () => {
     if (players.length < 3 || players.length > 6) return
@@ -101,7 +122,10 @@ export default function GameBoard() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
-      <h1 className="text-3xl font-bold mb-4">Emotions Board Game</h1>
+      <h1 className="text-3xl font-bold mb-4">EMOSPY สายลับจับอารมณ์</h1>
+      <Button onClick={() => setOpen(true)}>
+        <span className="text-black bg-white p-3 rounded-md">กติกา</span>
+      </Button>
 
       {!gameStarted ? (
         <div className="flex flex-col items-center">
@@ -146,9 +170,11 @@ export default function GameBoard() {
               setReviewPhase(false)
               setSpySelecting(true) // ให้ Spy เลือก Emotion
             }}
-            className="mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+            className="py-2 px-4"
           >
-            ไปยังการเลือก Emotion
+            <span className="text-black bg-white p-3 mt-5">
+              ไปยังการเลือก Emotion
+            </span>
           </Button>
         </div>
       ) : spySelecting ? (
@@ -174,15 +200,20 @@ export default function GameBoard() {
             {/* แสดงผลลัพธ์ */}
           </div>
           {spyWin !== null && (
-            <div className="text-center mt-10">
-              <h2 className="text-3xl font-bold">
-                {spyWin ? "🎉 Spy Win!" : "❌ Spy Lose!"}
-              </h2>
-              <Button onClick={() => window.location.reload()}>
-                <span className="text-black bg-white p-3 mt-5 text-xl">
-                  เล่นใหม่
-                </span>
-              </Button>
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+                <h2 className="text-3xl font-bold text-black">
+                  {spyWin ? "🎉 Spy Win!" : "❌ Spy Lose!"}
+                </h2>
+                <Button
+                  onClick={() => window.location.reload()}
+                  className="mt-5"
+                >
+                  <span className="text-black hover:text-white bg-slate-400 hover:bg-black px-6 py-3 mt-5 text-xl rounded-md">
+                    เล่นใหม่
+                  </span>
+                </Button>
+              </div>
             </div>
           )}
         </div>
@@ -214,9 +245,6 @@ export default function GameBoard() {
                           width={160}
                           height={224}
                         />
-                        <span className="text-lg font-bold">
-                          {filteredEmo?.name}
-                        </span>
                       </div>
                     )
                   ) : (
@@ -224,6 +252,16 @@ export default function GameBoard() {
                   )}
                 </CardContent>
               </Card>
+              {revealed &&
+                (roles[currentPlayer] === "Spy" ? (
+                  <span className="text-lg font-bold">Spy</span>
+                ) : (
+                  <div>
+                    <span className="text-lg font-bold w-full flex justify-center mt-2">
+                      {filteredEmo?.name}
+                    </span>
+                  </div>
+                ))}
             </motion.div>
 
             <motion.div whileTap={{ scale: 0.9 }}>
@@ -244,9 +282,6 @@ export default function GameBoard() {
                           width={160}
                           height={224}
                         />
-                        <span className="text-lg font-bold">
-                          {playerSituations[currentPlayer].name}
-                        </span>
                       </div>
                     )
                   ) : (
@@ -254,6 +289,16 @@ export default function GameBoard() {
                   )}
                 </CardContent>
               </Card>
+              {revealed &&
+                (roles[currentPlayer] === "Spy" ? (
+                  <span className="text-lg font-bold">Spy</span>
+                ) : (
+                  <div>
+                    <span className="text-lg font-bold w-full flex justify-center mt-2">
+                      {playerSituations[currentPlayer].name}
+                    </span>
+                  </div>
+                ))}
             </motion.div>
           </div>
 
@@ -264,6 +309,45 @@ export default function GameBoard() {
           </Button>
         </div>
       )}
+
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg w-96">
+          <Typography variant="h5" className="font-bold text-center">
+            📝 กติกาการเล่น
+          </Typography>
+          <Typography className="mt-3">
+            1.จำนวนผู้เล่น <br /> 
+            - เล่นได้ตั้งแต่ 3-6 คน <br />
+            - มี 1 คนเป็นสายลับ (Spy) และที่เหลือเป็น คนทั่วไป
+          </Typography>
+          <Typography className="mt-3">
+            2.การแจกบทบาท <br />
+            - ทุกคน (ยกเว้นสายลับ) จะได้รับ บทบาทอารมณ์เหมือนกัน แต่สถานการณ์ต่างกัน <br />
+            - สายลับจะไม่รู้ว่าอารมณ์และสถานการณ์นั้นคืออะไร
+          </Typography>
+          <Typography className="mt-3">
+            3.วิธีเล่น <br />
+            - ผู้เล่นจะผลัดกันถามคำถามกัน เช่น เคยเจอสถานการณ์แบบนี้ไหม หรือ อารมณ์นั้นพึ่งเกิดขึ้นไหม เป็นต้น <br />
+            - ห้ามถามตรง ๆ ว่าอารมณ์หรือสถานการณ์นั้นคืออะไร <br />
+            - สายลับต้องพยายามเนียนและจับคำใบ้จากคำตอบของคนอื่น <br />
+            - จะมีเวลาในการถามคำถามกันทั้งหมด 2 นาที และหลังจากนั้นจะเป็นการทบทวนตัวเอง
+            - โดยให้ผู้เล่นผลัดกันอธิบายอารมณ์ของตัวเองตามที่ได้รับไป <br />
+            - เมื่อผู้เล่นทบทวนตัวเองกันครบทุกคนแล้ว
+            - จึงเริ่มการโหวตว่าใครเป็นสายลับ โดยอิงตามเสียงข้างมาก <br />
+            - โดยถ้าจับถูกสายลับจะเป็นผู้แพ้ แต่ถ้าจับผิด สายลับจะเป็นผู้ชนะ <br />
+            - หลังสิ้นสุดการโหวตสายลับจะต้องทายอารมณ์ให้ถูกต้อง
+            จึงจะเป็นผู้ชนะหลังจากถูกจับได้
+          </Typography>
+
+          {/* ปุ่มปิด Modal */}
+          <Button
+            onClick={() => setOpen(false)}
+            className="mt-4 w-full bg-gray-800 text-white py-2 rounded-md"
+          >
+            ปิด
+          </Button>
+        </Box>
+      </Modal>
     </div>
   )
 }
