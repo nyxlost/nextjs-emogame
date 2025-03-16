@@ -13,7 +13,7 @@ import {
 import Image from "next/image"
 
 const emotions = [
-  { name: "โกรธ", image: "/images/angry.png" },
+  { name: "โกรธ", image: "/images/angry.jpg" },
   { name: "กลัว", image: "/images/fear.png" },
   { name: "อิจฉา", image: "/images/jealous.png" },
   { name: "เศร้า", image: "/images/sad.png" },
