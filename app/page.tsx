@@ -57,7 +57,7 @@ export default function GameBoard() {
   >([])
   const [selectedEmo, setSelectedEmo] = useState<string>("")
   const [allCardsRevealed, setAllCardsRevealed] = useState(false)
-  const [timer, setTimer] = useState<number>(600)
+  const [timer, setTimer] = useState<number>(420)
   const [timerActive, setTimerActive] = useState(false)
   const [spyWin, setSpyWin] = useState<boolean | null>(null)
   const [reviewPhase, setReviewPhase] = useState(false)
@@ -144,12 +144,12 @@ export default function GameBoard() {
             }}
             className="text-black mb-4 p-2"
           />
-          <label className="mb-2">Enter Player Names:</label>
+          <label className="mb-2">ใส่ชื่อผู้เล่น </label>
           {Array.from({ length: Number(numPlayers) }).map((_, index) => (
             <input
               key={index}
               type="text"
-              placeholder={`Player ${index + 1}`}
+              placeholder={`ผู้เล่น ${index + 1}`}
               className="text-black p-2 mb-2"
               onBlur={(e) => {
                 const newPlayers = [...players]
@@ -159,12 +159,17 @@ export default function GameBoard() {
             />
           ))}
           <Button onClick={startGame} className="py-2 px-4 mt-4">
-            <span className="text-black bg-white p-3">Start Game</span>
+            <span className="text-black bg-white p-3 border rounded-lg">
+              เริ่มเกม
+            </span>
           </Button>
         </div>
       ) : reviewPhase ? (
         <div className="text-center">
-          <h2 className="text-2xl font-bold">🧐 ทบทวนตัวเอง</h2>
+          <h2 className="text-2xl font-bold mt-5">
+            {" "}
+            ถ้าฉันเจอสถานการณ์นี้และอยู่ในอารมณ์นี้ ฉันจะ...{" "}
+          </h2>
           <Button
             onClick={() => {
               setReviewPhase(false)
@@ -172,14 +177,14 @@ export default function GameBoard() {
             }}
             className="py-2 px-4"
           >
-            <span className="text-black bg-white p-3 mt-5">
-              ไปยังการเลือก Emotion
+            <span className="text-black bg-white p-3 mt-5 border rounded-lg">
+              ไปยังการเลือกอารมณ์
             </span>
           </Button>
         </div>
       ) : spySelecting ? (
         <div className="text-center">
-          <h2 className="text-2xl font-bold">🔍 Spy เลือก Emotion</h2>
+          <h2 className="text-2xl font-bold mt-2">🔍 สายลับเลือกอารมณ์</h2>
           <div className="grid grid-cols-3 gap-4 mt-4">
             {emotions.map((emo) => (
               <motion.div key={emo.name} whileTap={{ scale: 0.9 }}>
@@ -203,7 +208,7 @@ export default function GameBoard() {
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
               <div className="bg-white p-6 rounded-lg shadow-lg text-center">
                 <h2 className="text-3xl font-bold text-black">
-                  {spyWin ? "🎉 Spy Win!" : "❌ Spy Lose!"}
+                  {spyWin ? "🎉 ตอบถูก!" : "❌ ตอบผิด!"}
                 </h2>
                 <Button
                   onClick={() => window.location.reload()}
@@ -220,8 +225,11 @@ export default function GameBoard() {
       ) : allCardsRevealed ? (
         <>
           <div className="text-center">
-            <h2 className="text-2xl font-bold">Game Started!</h2>
-            <p className="text-lg mt-4">Time Left:  {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, "0")}</p>
+            <h2 className="text-2xl font-bold mt-5">เริ่มเกม !</h2>
+            <p className="text-lg mt-4">
+              เวลา : {Math.floor(timer / 60)}:
+              {(timer % 60).toString().padStart(2, "0")}
+            </p>
           </div>
           <div className="text-center mt-5">
             <h2 className="text-2xl font-bold">คำถามแนะนำ</h2>
@@ -238,11 +246,18 @@ export default function GameBoard() {
             <p className="text-lg mt-4">5. ช่วยแสดงสีหน้าตามอารมณ์ที่ได้</p>
             <p className="text-lg mt-4">6. จะพูดอะไรกับคนที่มีอารมณ์ที่ได้</p>
             <p className="text-lg mt-4">7. ขอ 3 คำให้กับอารมณ์ที่ได้</p>
+            <p className="text-lg mt-4">8. มีอะไรอยากบอกกับตัวเองมั้ย</p>
+            <p className="text-lg mt-4">9. ขอเพลง 1 ท่อนที่ตรงกับอารมณ์นี้</p>
           </div>
+          <Button onClick={() => setTimer(0)} className="py-2 px-4">
+            <span className="text-black bg-white p-3 mt-5 border rounded-lg">
+              ข้าม
+            </span>
+          </Button>
         </>
       ) : (
         <div className="flex flex-col items-center">
-          <h2 className="text-xl mb-4">{players[currentPlayer]} Is Turn</h2>
+          <h2 className="text-xl mb-4">รอบของ {players[currentPlayer]}</h2>
 
           <div className="flex gap-4">
             <motion.div whileTap={{ scale: 0.9 }}>
@@ -253,7 +268,7 @@ export default function GameBoard() {
                 <CardContent>
                   {revealed ? (
                     roles[currentPlayer] === "Spy" ? (
-                      <span className="text-lg font-bold">Spy</span>
+                      <span className="text-lg font-bold">สายลับ</span>
                     ) : (
                       <div>
                         <Image
@@ -266,13 +281,13 @@ export default function GameBoard() {
                       </div>
                     )
                   ) : (
-                    <span className="text-gray-400">Tap to Reveal</span>
+                    <span className="text-gray-400">กดเพื่อดู</span>
                   )}
                 </CardContent>
               </Card>
               {revealed &&
                 (roles[currentPlayer] === "Spy" ? (
-                  <span className="text-lg font-bold">Spy</span>
+                  <span className="text-lg font-bold">สายลับ</span>
                 ) : (
                   <div>
                     <span className="text-lg font-bold w-full flex justify-center mt-2">
@@ -290,7 +305,7 @@ export default function GameBoard() {
                 <CardContent>
                   {revealed ? (
                     roles[currentPlayer] === "Spy" ? (
-                      <span className="text-lg font-bold">Spy</span>
+                      <span className="text-lg font-bold">สายลับ</span>
                     ) : (
                       <div>
                         <Image
@@ -303,13 +318,13 @@ export default function GameBoard() {
                       </div>
                     )
                   ) : (
-                    <span className="text-gray-400">Tap to Reveal</span>
+                    <span className="text-gray-400">กดเพื่อดู</span>
                   )}
                 </CardContent>
               </Card>
               {revealed &&
                 (roles[currentPlayer] === "Spy" ? (
-                  <span className="text-lg font-bold">Spy</span>
+                  <span className="text-lg font-bold">สายลับ</span>
                 ) : (
                   <div>
                     <span className="text-lg font-bold w-full flex justify-center mt-2">
@@ -335,8 +350,8 @@ export default function GameBoard() {
           </Typography>
           <Typography className="mt-3">
             1.จำนวนผู้เล่น <br />
-            - เล่นได้ตั้งแต่ 3-6 คน <br />- มี 1 คนเป็นสายลับ (Spy)
-            และที่เหลือเป็น คนทั่วไป
+            - เล่นได้ตั้งแต่ 3-6 คน <br />- มี 1 คน ได้รับบทบาทสายลับ (Spy)
+            และที่เหลือได้รับบทบาทอารมณ์ ได้แก่ โกรธ กลัว กังวล อิจฉา เศร้า อาย
           </Typography>
           <Typography className="mt-3">
             2.การแจกบทบาท <br />
@@ -348,17 +363,23 @@ export default function GameBoard() {
             3.วิธีเล่น <br />
             - ผู้เล่นจะผลัดกันถามคำถามกัน เช่น เคยเจอสถานการณ์แบบนี้ไหม หรือ
             อารมณ์นั้นพึ่งเกิดขึ้นไหม เป็นต้น <br />
-            - ห้ามถามตรง ๆ ว่าอารมณ์หรือสถานการณ์นั้นคืออะไร <br />
+            - ห้ามถามตรง ๆ ว่าอารมณ์หรือสถานการณ์นั้นคืออะไร
+            และห้ามตอบคำถามโดยพูดชื่ออารมณ์นั้นออกมาตรง ๆ <br />
             - สายลับต้องพยายามเนียนและจับคำใบ้จากคำตอบของคนอื่น <br />
-            - จะมีเวลาในการถามคำถามกันทั้งหมด 10 นาที
-            และหลังจากนั้นจะเป็นการทบทวนตัวเอง <br />
-            - โดยให้ผู้เล่นผลัดกันอธิบายอารมณ์ของตัวเองตามที่ได้รับไป <br />
-            - เมื่อผู้เล่นทบทวนตัวเองกันครบทุกคนแล้ว
+            - จะมีเวลาในการถามคำถามกันทั้งหมด 7 นาที
+            และหลังจากนั้นจะเป็นการอธิบายแนวทางการรับมือกับอารมณ์นั้น
+            โดยให้ผู้เล่นผลัดกันอธิบายอารมณ์ของตัวเองตามที่ได้รับไป <br />
+            - เมื่อผู้เล่นผลัดกันอธิบายกันครบทุกคนแล้ว
             จึงเริ่มการโหวตว่าใครเป็นสายลับ โดยอิงตามเสียงข้างมาก <br />
-            - โดยถ้าจับถูกสายลับจะเป็นผู้แพ้ แต่ถ้าจับผิด สายลับจะเป็นผู้ชนะ{" "}
-            <br />- หลังสิ้นสุดการโหวตสายลับจะต้องทายอารมณ์ให้ถูกต้อง
-            จึงจะเป็นผู้ชนะหลังจากถูกจับได้
           </Typography>
+          <Typography className="mt-3">
+            4.การตัดสินผลแพ้ชนะ <br />
+            - หากคนทั่วไปหาสายลับเจอ และสายลับตอบผิด สายลับจะแพ้ <br />
+            - หากคนทั่วไปหาสายลับไม่เจอ และสายลับตอบถูก สายลับจะชนะ <br />
+            - หากคนทั่วไปหาสายลับไม่เจอ และสายลับตอบผิด หรือ
+            หากคนทั่วไปหาสายลับเจอ และสายลับตอบถูก จะถือว่าเสมอกัน <br />
+          </Typography>
+          <p className="mt-3 font-medium text-lg"> ความยากของเกม ⭐️⭐️⭐️ </p>
 
           <Button
             onClick={() => setOpen(false)}
